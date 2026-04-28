@@ -72,12 +72,18 @@ def p_Program(p):
     """
     p[0] = ('program', p[6], p[7])
 
+def p_EPSILON(p):
+    """
+    EPSILON :
+    """
+    p[0] = None
+
 def p_Declarations(p):
     """
-    Declarations :
+    Declarations : EPSILON
                  | Declarations Declaration
     """
-    if len(p) == 1:
+    if p[1] is None:
         p[0] = []
     else:
         p[0] = p[1] + [p[2]]
@@ -99,10 +105,10 @@ def p_Type(p):
 
 def p_Statements(p):
     """
-    Statements :
+    Statements : EPSILON
                | Statements Statement
     """
-    if len(p) == 1:
+    if p[1] is None:
         p[0] = []
     else:
         p[0] = p[1] + [p[2]]
@@ -134,13 +140,19 @@ def p_Assignment(p):
 
 def p_IfStatement(p):
     """
-    IfStatement : IF '(' Expression ')' Statement %prec IFX
-                | IF '(' Expression ')' Statement ELSE Statement
+    IfStatement : IF '(' Expression ')' Statement ElsePart
     """
-    if len(p) == 6:
-        p[0] = ('if', p[3], p[5], None)
+    p[0] = ('if', p[3], p[5], p[6])
+
+def p_ElsePart(p):
+    """
+    ElsePart : EPSILON %prec IFX
+             | ELSE Statement
+    """
+    if p[1] is None:
+        p[0] = None
     else:
-        p[0] = ('if', p[3], p[5], p[7])
+        p[0] = p[2]
 
 def p_WhileStatement(p):
     """
