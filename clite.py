@@ -171,60 +171,90 @@ def p_Conjunction(p):
 def p_Equality(p):
     """
     Equality : Relation
-             | Relation EQ Relation
-             | Relation NEQ Relation
+             | Relation EquOp Relation
     """
     if len(p) == 2:
         p[0] = p[1]
     else:
         p[0] = (p[2], p[1], p[3])
+
+def p_EquOp(p):
+    """
+    EquOp : EQ
+          | NEQ
+    """
+    p[0] = p[1]
 
 def p_Relation(p):
     """
     Relation : Addition
-             | Addition '<' Addition
-             | Addition LE Addition
-             | Addition '>' Addition
-             | Addition GE Addition
+             | Addition RelOp Addition
     """
     if len(p) == 2:
         p[0] = p[1]
     else:
         p[0] = (p[2], p[1], p[3])
+
+def p_RelOp(p):
+    """
+    RelOp : '<'
+          | LE
+          | '>'
+          | GE
+    """
+    p[0] = p[1]
 
 def p_Addition(p):
     """
     Addition : Term
-             | Addition '+' Term
-             | Addition '-' Term
+             | Addition AddOp Term
     """
     if len(p) == 2:
         p[0] = p[1]
     else:
         p[0] = (p[2], p[1], p[3])
+
+def p_AddOp(p):
+    """
+    AddOp : '+'
+          | '-'
+    """
+    p[0] = p[1]
 
 def p_Term(p):
     """
     Term : Factor
-         | Term '*' Factor
-         | Term '/' Factor
-         | Term '%' Factor
+         | Term MulOp Factor
     """
     if len(p) == 2:
         p[0] = p[1]
     else:
         p[0] = (p[2], p[1], p[3])
 
+def p_MulOp(p):
+    """
+    MulOp : '*'
+          | '/'
+          | '%'
+    """
+    p[0] = p[1]
+
 def p_Factor(p):
     """
     Factor : Primary
-           | '-' Primary
-           | '!' Primary
+           | UnaryOp Primary
     """
     if len(p) == 2:
         p[0] = p[1]
     else:
         p[0] = ('unary' + p[1], p[2])
+
+def p_UnaryOp(p):
+    """
+    UnaryOp : '-'
+            | '!'
+    """
+    p[0] = p[1]
 
 def p_Primary(p):
     """
